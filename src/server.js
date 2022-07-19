@@ -1,9 +1,9 @@
-import app from "./app.js";
-import connectToDb from "./utils/mongoDb.js";
+import app from './app.js';
+import connectToDb from './utils/mongoDb.js';
 
 connectToDb();
 
 const port = process.env.PORT || 3000;
-app.listen(() => {
+app.listen(port, () => {
   console.log(`App running on ${port}...`);
 });
