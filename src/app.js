@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 
 // Routers
 import userRouter from './routes/userRoutes.js';
+import videoRouter from './routes/videoRoutes.js';
 // Utils
 import AppError from './utils/AppError.js';
 import globalErrorHandler from './utils/globalErrorHandler.js';
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(morgan('tiny'));
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/videos', videoRouter);
 
 app.all('*', (req, res, next) => {
   next(
