@@ -57,6 +57,48 @@ export const deleteVideo = catchAsync(async (req, res) => {
   });
 });
 
+export const likeVideo = catchAsync(async (req, res) => {
+  const videoId = req.params.id;
+  const userId = req.user.id;
+
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    {
+      $addToSet: { likes: userId },
+      $pull: { dislikes: userId },
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      video: updatedVideo,
+    },
+  });
+});
+
+export const dislikeVideo = catchAsync(async (req, res) => {
+  const videoId = req.params.id;
+  const userId = req.user.id;
+
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    {
+      $addToSet: { dislikes: userId },
+      $pull: { likes: userId },
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      video: updatedVideo,
+    },
+  });
+});
+
 export const doesVideoExist = catchAsync(async (req, res, next) => {
   const video = await Video.findById(req.params.id);
   if (!video) {
