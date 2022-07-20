@@ -70,8 +70,7 @@ export const protect = catchAsync(async (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
     next(
-      new AppError('You are not logged in! Please log in to get access'),
-      401
+      new AppError('You are not logged in! Please log in to get access', 401)
     );
   }
 
@@ -85,8 +84,10 @@ export const protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
-      new AppError('The user belonging to this token does no longer exist.'),
-      401
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401
+      )
     );
   }
   // 4. If it's valid put that user into request
@@ -99,8 +100,7 @@ export const restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new AppError('You do not have permission to perform this action!'),
-        403
+        new AppError('You do not have permission to perform this action!', 403)
       );
     }
     next();
