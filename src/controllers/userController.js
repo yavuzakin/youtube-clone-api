@@ -28,15 +28,71 @@ export const updateUser = catchAsync(async (req, res, next) => {
   });
 });
 
+export const subscribeToUser = catchAsync(async (req, res) => {
+  const queriedUserId = req.queriedUser.id;
+  const loggedInUserId = req.user.id;
+
+  const updatedQueriedUser = await User.findByIdAndUpdate(
+    queriedUserId,
+    { $addToSet: { subscribers: loggedInUserId } },
+    { new: true }
+  );
+  const updatedLoggedInUser = await User.findByIdAndUpdate(
+    loggedInUserId,
+    { $addToSet: { subscribedUsers: queriedUserId } },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedLoggedInUser,
+      subscribedTo: updatedQueriedUser,
+    },
+  });
+});
+
+export const unSubscribeFromUser = catchAsync(async (req, res) => {
+  const queriedUserId = req.queriedUser.id;
+  const loggedInUserId = req.user.id;
+
+  const updatedQueriedUser = await User.findByIdAndUpdate(
+    queriedUserId,
+    { $pull: { subscribers: loggedInUserId } },
+    { new: true }
+  );
+  const updatedLoggedInUser = await User.findByIdAndUpdate(
+    loggedInUserId,
+    { $pull: { subscribedUsers: queriedUserId } },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedLoggedInUser,
+      unSubscribedFrom: updatedQueriedUser,
+    },
+  });
+});
+
+export const doesUserExist = catchAsync(async (req, res, next) => {
+  const queriedUser = await User.findById(req.params.id);
+  if (!queriedUser) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+  req.queriedUser = queriedUser;
+  next();
+});
+
 export const isOwner = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
-    return next(new AppError('No document found with that ID'), 404);
+    return next(new AppError('No document found with that ID', 404));
   }
   if (user.id !== req.user.id) {
     return next(
-      new AppError('You do not have permission to perform this action'),
-      403
+      new AppError('You do not have permission to perform this action', 403)
     );
   }
   next();

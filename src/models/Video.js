@@ -48,7 +48,7 @@ const videoSchema = new mongoose.Schema(
 videoSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: 'username',
+    select: 'username profilePic',
   });
   next();
 });

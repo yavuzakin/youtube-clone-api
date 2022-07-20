@@ -20,10 +20,11 @@ const userSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
+      default: 'url.noimage',
     },
     subscribers: {
-      type: Number,
-      default: 0,
+      type: [String],
+      default: [],
     },
     subscribedUsers: {
       type: [String],
