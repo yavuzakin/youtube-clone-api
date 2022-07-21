@@ -14,7 +14,7 @@ import {
 } from '../controllers/videoController.js';
 import commentRouter from './commentRoutes.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use('/:videoId/comments', commentRouter);
 

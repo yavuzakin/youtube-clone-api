@@ -23,10 +23,15 @@ export const createComment = catchAsync(async (req, res) => {
 
 export const getAllComments = catchAsync(async (req, res) => {
   const videoId = req.params.videoId;
+  const userId = req.params.userId;
+
   let filter = {};
 
   if (videoId) {
     filter = { video: videoId };
+  }
+  if (userId) {
+    filter = { user: userId };
   }
   const comments = await Comment.find(filter);
 

@@ -24,7 +24,13 @@ export const createVideo = catchAsync(async (req, res) => {
 });
 
 export const getAllVideos = catchAsync(async (req, res) => {
-  const videos = await Video.find();
+  const userId = req.params.userId;
+  let filter = {};
+
+  if (userId) {
+    filter = { user: userId };
+  }
+  const videos = await Video.find(filter);
 
   res.status(200).json({
     status: 'success',

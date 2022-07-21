@@ -9,8 +9,13 @@ import {
   subscribeToUser,
   unSubscribeFromUser,
 } from '../controllers/userController.js';
+import videoRouter from './videoRoutes.js';
+import commentRouter from './commentRoutes.js';
 
 const router = express.Router();
+
+router.use('/:userId/videos', videoRouter);
+router.use('/:userId/comments', commentRouter);
 
 router.post('/register', register);
 router.post('/login', login);
