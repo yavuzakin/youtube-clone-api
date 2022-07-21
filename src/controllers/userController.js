@@ -1,11 +1,29 @@
 import bcrypt from 'bcrypt';
 
 import User from '../models/User.js';
+import Video from '../models/Video.js';
+import Comment from '../models/Comment.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
 export const deleteUser = catchAsync(async (req, res, next) => {
-  await User.findByIdAndDelete(req.params.id);
+  const userId = req.params.id;
+  const userVideos = await Video.find({ user: userId });
+
+  const userDeletePromise = User.findByIdAndDelete(userId);
+  const userVideosDeletePromise = Video.deleteMany({ user: userId });
+  const userCommentsDeletePromise = Comment.deleteMany({ user: userId });
+  const userVideosCommentsDeletePromises = userVideos.map((userVideo) =>
+    Comment.deleteMany({ video: userVideo._id })
+  );
+
+  await Promise.all([
+    userDeletePromise,
+    userVideosDeletePromise,
+    userCommentsDeletePromise,
+    ...userVideosCommentsDeletePromises,
+  ]);
+
   res.status(204).json({
     status: 'success',
     data: null,

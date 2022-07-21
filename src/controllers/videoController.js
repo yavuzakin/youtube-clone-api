@@ -1,4 +1,5 @@
 import Video from '../models/Video.js';
+import Comment from '../models/Comment.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
@@ -55,7 +56,12 @@ export const getVideo = catchAsync(async (req, res) => {
 export const updateVideo = catchAsync(async (req, res) => {});
 
 export const deleteVideo = catchAsync(async (req, res) => {
-  await Video.findByIdAndDelete(req.params.id);
+  const videoDeletePromise = Video.findByIdAndDelete(req.params.id);
+  const videoCommentsDeletePromise = Comment.deleteMany({
+    video: req.params.id,
+  });
+
+  await Promise.all([videoDeletePromise, videoCommentsDeletePromise]);
 
   res.status(204).json({
     status: 'success',
