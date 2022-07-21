@@ -65,6 +65,14 @@ export const login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, req, res);
 });
 
+export const logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 export const protect = catchAsync(async (req, res, next) => {
   // 1. Check if there is a token
   const token = req.cookies.jwt;

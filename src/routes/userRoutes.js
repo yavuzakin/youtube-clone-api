@@ -1,6 +1,11 @@
 import express from 'express';
 
-import { register, login, protect } from '../controllers/authController.js';
+import {
+  register,
+  login,
+  logout,
+  protect,
+} from '../controllers/authController.js';
 import {
   isOwner,
   doesUserExist,
@@ -19,6 +24,7 @@ router.use('/:userId/comments', commentRouter);
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/logout', logout);
 
 router
   .route('/:id')
