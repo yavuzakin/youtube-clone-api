@@ -22,7 +22,13 @@ export const createComment = catchAsync(async (req, res) => {
 });
 
 export const getAllComments = catchAsync(async (req, res) => {
-  const comments = await Comment.find();
+  const videoId = req.params.videoId;
+  let filter = {};
+
+  if (videoId) {
+    filter = { video: videoId };
+  }
+  const comments = await Comment.find(filter);
 
   res.status(200).json({
     status: 'success',

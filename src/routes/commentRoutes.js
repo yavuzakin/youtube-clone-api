@@ -11,7 +11,7 @@ import {
   isCommentOwner,
 } from '../controllers/commentController.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.route('/').get(getAllComments).post(protect, createComment);
 router

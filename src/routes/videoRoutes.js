@@ -12,8 +12,11 @@ import {
   likeVideo,
   dislikeVideo,
 } from '../controllers/videoController.js';
+import commentRouter from './commentRoutes.js';
 
 const router = express.Router();
+
+router.use('/:videoId/comments', commentRouter);
 
 router.route('/').post(protect, createVideo).get(getAllVideos);
 router
