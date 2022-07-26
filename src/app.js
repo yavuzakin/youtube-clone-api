@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 // Routers
 import userRouter from './routes/userRoutes.js';
@@ -12,6 +13,7 @@ import AppError from './utils/AppError.js';
 import globalErrorHandler from './utils/globalErrorHandler.js';
 
 const app = express();
+app.use(cors());
 
 dotenv.config();
 
