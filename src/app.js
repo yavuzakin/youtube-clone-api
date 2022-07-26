@@ -13,7 +13,7 @@ import AppError from './utils/AppError.js';
 import globalErrorHandler from './utils/globalErrorHandler.js';
 
 const app = express();
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 dotenv.config();
 
