@@ -65,6 +65,24 @@ export const login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, req, res);
 });
 
+export const googleLogin = catchAsync(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (user) {
+    createAndSendToken(user, 200, req, res);
+  } else {
+    const { username, email, password } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = new User({ ...req.body, password: hashedPassword });
+
+    const storedUser = await newUser.save();
+
+    createAndSendToken(storedUser, 201, req, res);
+  }
+});
+
 export const logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),

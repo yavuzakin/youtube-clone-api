@@ -3,6 +3,7 @@ import express from 'express';
 import {
   register,
   login,
+  googleLogin,
   logout,
   protect,
 } from '../controllers/authController.js';
@@ -24,6 +25,7 @@ router.use('/:userId/comments', commentRouter);
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/google-login', googleLogin);
 router.get('/logout', logout);
 
 router
