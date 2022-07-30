@@ -4,7 +4,7 @@ import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
 export const createVideo = catchAsync(async (req, res) => {
-  const { title, description, imgUrl, videoUrl } = req.body;
+  const { title, description, imgUrl, videoUrl, tags } = req.body;
 
   const newVideo = new Video({
     user: req.user._id,
@@ -12,6 +12,7 @@ export const createVideo = catchAsync(async (req, res) => {
     description,
     imgUrl,
     videoUrl,
+    tags,
   });
 
   const storedVideo = await newVideo.save();
