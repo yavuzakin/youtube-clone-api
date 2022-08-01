@@ -6,6 +6,15 @@ import Comment from '../models/Comment.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
+export const getUser = catchAsync(async (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: req.queriedUser,
+    },
+  });
+});
+
 export const deleteUser = catchAsync(async (req, res, next) => {
   const userId = req.params.id;
   const userVideos = await Video.find({ user: userId });

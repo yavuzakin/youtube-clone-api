@@ -10,6 +10,7 @@ import {
 import {
   isOwner,
   doesUserExist,
+  getUser,
   deleteUser,
   updateUser,
   subscribeToUser,
@@ -30,6 +31,7 @@ router.get('/logout', logout);
 
 router
   .route('/:id')
+  .get(doesUserExist, getUser)
   .patch(protect, isOwner, updateUser)
   .delete(protect, isOwner, deleteUser);
 
