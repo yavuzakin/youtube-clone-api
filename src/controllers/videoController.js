@@ -27,7 +27,9 @@ export const createVideo = catchAsync(async (req, res) => {
 
 export const getAllVideos = catchAsync(async (req, res) => {
   const tags = req.query.tags;
+  const query = req.query.query;
   const userId = req.params.userId;
+
   let filter = {};
 
   if (userId) {
@@ -37,6 +39,17 @@ export const getAllVideos = catchAsync(async (req, res) => {
   if (tags) {
     const requestedTags = tags.split(',');
     filter = { tags: { $in: requestedTags } };
+  }
+
+  if (query) {
+    const regexp = new RegExp(query, 'i');
+    filter = {
+      $or: [
+        { tags: { $in: regexp } },
+        { title: regexp },
+        { description: regexp },
+      ],
+    };
   }
 
   const videos = await Video.find(filter);
