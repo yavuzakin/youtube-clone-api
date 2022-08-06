@@ -11,12 +11,15 @@ import {
   isVideoOwner,
   likeVideo,
   dislikeVideo,
+  getSubscribedChannelsVideos,
 } from '../controllers/videoController.js';
 import commentRouter from './commentRoutes.js';
 
 const router = express.Router({ mergeParams: true });
 
 router.use('/:videoId/comments', commentRouter);
+
+router.get('/subscribed-channels', protect, getSubscribedChannelsVideos);
 
 router.route('/').post(protect, createVideo).get(getAllVideos);
 router

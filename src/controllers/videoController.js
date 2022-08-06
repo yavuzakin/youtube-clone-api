@@ -63,6 +63,23 @@ export const getAllVideos = catchAsync(async (req, res) => {
   });
 });
 
+export const getSubscribedChannelsVideos = catchAsync(async (req, res) => {
+  const promises = req.user.subscribedUsers.map((subbedUser) => {
+    return Video.find({ user: subbedUser });
+  });
+
+  const videoArray = await Promise.all(promises);
+  const videos = videoArray.flat();
+
+  res.status(200).json({
+    status: 'success',
+    results: videos.length,
+    data: {
+      videos,
+    },
+  });
+});
+
 export const getVideo = catchAsync(async (req, res) => {
   const video = await Video.findById(req.params.id);
 
