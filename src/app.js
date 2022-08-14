@@ -15,7 +15,7 @@ import globalErrorHandler from './utils/globalErrorHandler.js';
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'youtube-clone-ui.herokuapp.com'],
     credentials: true,
   })
 );
